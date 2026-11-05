@@ -26,18 +26,18 @@ export default function Home() {
       if (savedCart) setCart(sanitizeCart(JSON.parse(savedCart)));
       if (savedCurrency === "PKR" || savedCurrency === "USD") setCurrency(savedCurrency);
     } catch {
-      localStorage.removeItem(CART_KEY);
+      // Browser storage can be unavailable in private or restricted contexts.
     } finally {
       setCartReady(true);
     }
   }, []);
 
   useEffect(() => {
-    if (cartReady) localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    if (cartReady) { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch { /* Keep the in-memory cart usable if storage is blocked. */ } }
   }, [cart, cartReady]);
 
   useEffect(() => {
-    localStorage.setItem(CURRENCY_KEY, currency);
+    try { localStorage.setItem(CURRENCY_KEY, currency); } catch { /* Currency selection still works for this session. */ }
   }, [currency]);
 
   const count = useMemo(() => countCartItems(cart), [cart]);
@@ -54,7 +54,7 @@ export default function Home() {
     : `$${amount.toFixed(2)}`;
 
   function add(id: string) {
-    setCart((current) => ({ ...current, [id]: (current[id] || 0) + 1 }));
+    setCart((current) => ({ ...current, [id]: Math.min(99, (current[id] || 0) + 1) }));
     setNotice("Added to your bag");
     window.setTimeout(() => setNotice(""), 1800);
   }
