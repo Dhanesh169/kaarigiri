@@ -11,11 +11,11 @@ export default function PWARegister() {
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("/sw.js").catch((error) => {
-          console.error("Kaarigiri offline support could not be registered:", error);
-        });
-      }, { once: true });
+      const register = () => navigator.serviceWorker.register("/sw.js").catch((error) => {
+        console.error("Kaarigiri offline support could not be registered:", error);
+      });
+      if (document.readyState === "complete") register();
+      else window.addEventListener("load", register, { once: true });
     }
     const onBeforeInstall = (event: Event) => {
       event.preventDefault();
