@@ -33,6 +33,7 @@
     "tailwindcss": "^4.1.16",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4",
-    "tsx": "^4.20.6"
+    "tsx": "^4.20.6",
+    "@tailwindcss/postcss": "^4.1.16"
   }
 }
