@@ -75,3 +75,50 @@
 .pwa-help{position:absolute;z-index:20;top:calc(100% + 10px);right:0;width:260px;padding:14px 16px;background:#25271f;color:#f7f5ef;font-size:11px;line-height:1.65;box-shadow:0 8px 24px #0002}
 .pwa-help b{color:#e6c7a9}
 @media(max-width:600px){.pwa-help{right:-72px;width:230px}}
+
+/* Product, account and checkout flows */
+.account-icon{display:inline-flex;align-items:center;color:var(--ink)}
+.detail-page,.account-page,.checkout-page{min-height:100vh;background:var(--paper);padding:28px 24px}
+.detail-nav,.checkout-header{max-width:1180px;margin:0 auto 44px;display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.detail-nav>a:first-child,.account-brand{font-family:Georgia,serif;font-size:30px}
+.detail-layout{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,7vw,90px);align-items:center}
+.detail-photo img{width:100%;max-height:680px;aspect-ratio:4/5;object-fit:cover}
+.detail-copy h1,.checkout-layout h1,.account-card h1{font-size:clamp(38px,5vw,62px);font-weight:400;line-height:1.06;margin:20px 0}
+.detail-copy>p{font-size:14px;line-height:1.9;color:var(--muted);max-width:440px}
+.detail-price{font-size:20px;margin:30px 0}
+.detail-price span{font-size:13px;color:var(--muted)}
+.detail-note{font-size:11px!important}
+.detail-add{margin:18px 0;gap:10px}
+.detail-back,.account-track{display:block;margin-top:24px;font-size:11px;text-decoration:underline}
+.account-page{display:flex;flex-direction:column;align-items:center}
+.account-brand{align-self:flex-start;max-width:520px;width:100%;margin:0 auto 42px}
+.account-card{width:min(520px,100%);background:#fffefa;border:1px solid var(--line);padding:clamp(24px,5vw,48px)}
+.account-card>p{font-size:13px;color:var(--muted);line-height:1.7}
+.account-tabs{display:flex;border-bottom:1px solid var(--line);margin:28px 0 22px}
+.account-tabs button{flex:1;background:transparent;border:0;padding:13px;font-size:11px;color:var(--muted)}
+.account-tabs button.selected{color:var(--ink);border-bottom:2px solid var(--ink)}
+.account-card form,.checkout-form{display:grid;gap:16px}
+.account-card label,.checkout-form label{display:grid;gap:8px;font-size:11px;color:var(--muted)}
+.account-card input,.checkout-form input,.checkout-form select{width:100%;border:1px solid var(--line);background:#fff;padding:13px;font:inherit;color:var(--ink);outline-color:var(--olive)}
+.account-submit{width:100%;margin-top:8px}
+.account-card small{font-size:10px;color:var(--muted)}
+.form-error{font-size:12px!important;color:#a33!important;background:#fff0ed;padding:10px}
+.checkout-header{margin-bottom:55px}
+.checkout-header span{font-size:10px;letter-spacing:.16em;color:var(--muted)}
+.checkout-layout{max-width:1080px;margin:auto;display:grid;grid-template-columns:1.2fr .8fr;gap:70px}
+.checkout-layout h1{font-size:42px}
+.checkout-form{margin-top:30px}
+.checkout-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.checkout-disclaimer,.checkout-summary>p{font-size:11px;color:var(--muted);line-height:1.7}
+.checkout-summary{background:#eeece5;padding:28px;height:max-content}
+.checkout-summary h2{font-size:30px;font-weight:400;margin:0 0 22px}
+.summary-line{display:grid;grid-template-columns:54px 1fr auto;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #dcd8cf;font-size:11px}
+.summary-line img{width:54px;height:64px;object-fit:cover}
+.summary-line b{white-space:nowrap}
+.summary-total{display:flex;justify-content:space-between;padding:22px 0;font-size:12px}
+.order-result,.order-card{border:1px solid var(--line);padding:16px;margin-top:20px;display:grid;gap:10px;font-size:12px}
+.order-result span,.order-card>span{color:var(--olive);text-transform:uppercase;font-size:10px;letter-spacing:.12em}
+.order-card small{display:block;color:var(--muted);margin-top:5px}
+.order-card p{grid-column:1/-1;color:var(--muted)}
+@media(max-width:760px){.detail-layout,.checkout-layout{grid-template-columns:1fr;gap:32px}.detail-nav,.checkout-header{margin-bottom:28px}.detail-photo img{max-height:460px}.checkout-layout h1{font-size:36px}.checkout-summary{order:-1}.account-brand{margin-bottom:28px}}
+@media(max-width:460px){.checkout-two{grid-template-columns:1fr}.detail-page,.account-page,.checkout-page{padding:20px 16px}.account-card{padding:24px 18px}}
