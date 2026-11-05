@@ -15,6 +15,7 @@ jobs:
     env:
       DATABASE_URL: postgresql://test:test@localhost:5432/kaarigiri
       DIRECT_URL: postgresql://test:test@localhost:5432/kaarigiri
+      AUTH_SECRET: ci-test-secret-that-is-long-enough-for-the-application
     steps:
       - name: Check out source
         uses: actions/checkout@v4
