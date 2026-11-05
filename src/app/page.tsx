@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ShoppingBag, ArrowUpRight, X, Plus, Minus, Check, Search, Trash2 } from "lucide-react";
+import { ShoppingBag, ArrowUpRight, X, Plus, Minus, Check, Search, Trash2, UserRound } from "lucide-react";
+import Link from "next/link";
 import { products } from "@/lib/products";
 import { calculateCartSubtotal, countCartItems, sanitizeCart } from "@/lib/cart";
 import PWARegister from "./PWARegister";
@@ -75,6 +76,7 @@ export default function Home() {
         <a href="#" className="wordmark" aria-label="Kaarigiri home">kaarigiri<span>.</span></a>
         <div className="header-actions">
           <PWARegister />
+          <Link href="/account" aria-label="Customer account" className="account-icon"><UserRound size={16}/></Link>
           <label className="currency-picker">
             <span className="sr-only">Display currency</span>
             <select aria-label="Currency" value={currency} onChange={(event) => setCurrency(event.target.value as Currency)}>
@@ -127,10 +129,10 @@ export default function Home() {
                 <div className="product-image-wrap">
                   <img src={product.image} alt={product.name} loading="lazy" />
                   {product.tag && <span className="product-tag">{product.tag}</span>}
-                  <button className="add-product" onClick={() => add(product.id)} aria-label={`Add ${product.name} to bag`}><Plus size={18} /></button>
+                  <button className="add-product" onClick={() => add(product.slug)} aria-label={`Add ${product.name} to bag`}><Plus size={18} /></button>
                 </div>
                 <div className="product-info">
-                  <div><div className="name">{product.name}</div><div className="eyebrow product-category">{product.category}</div></div>
+                  <div><Link className="name" href={"/products/"+product.slug}>{product.name}</Link><div className="eyebrow product-category">{product.category}</div></div>
                   <div className="price">{money(currency === "PKR" ? product.pricePKR : product.priceUSD)}</div>
                 </div>
                 <p className="product-description">{product.description}</p>
@@ -163,17 +165,17 @@ export default function Home() {
               <h2 className="serif" id="cart-title">Your bag ({count})</h2>
               <button onClick={() => setOpen(false)} aria-label="Close shopping bag"><X /></button>
             </div>
-            {!cartReady ? <p className="cart-empty">Restoring your bag…</p> : products.filter((product) => cart[product.id]).map((product) => (
+            {!cartReady ? <p className="cart-empty">Restoring your bag…</p> : products.filter((product) => cart[product.slug]).map((product) => (
               <div className="cart-item" key={product.id}>
                 <img src={product.image} alt="" />
                 <div className="cart-item-details">
                   <div className="cart-product-name serif">{product.name}</div>
                   <div className="cart-product-price">{money(currency === "PKR" ? product.pricePKR : product.priceUSD)}</div>
                   <div className="quantity-control">
-                    <button onClick={() => changeQuantity(product.id, -1)} aria-label={`Remove one ${product.name}`}><Minus size={14} /></button>
-                    <span>{cart[product.id]}</span>
-                    <button onClick={() => changeQuantity(product.id, 1)} aria-label={`Add one ${product.name}`}><Plus size={14} /></button>
-                    <button className="remove-item" onClick={() => setCart((current) => { const next = { ...current }; delete next[product.id]; return next; })} aria-label={`Remove ${product.name} from bag`}><Trash2 size={14} /></button>
+                    <button onClick={() => changeQuantity(product.slug, -1)} aria-label={`Remove one ${product.name}`}><Minus size={14} /></button>
+                    <span>{cart[product.slug]}</span>
+                    <button onClick={() => changeQuantity(product.slug, 1)} aria-label={`Add one ${product.name}`}><Plus size={14} /></button>
+                    <button className="remove-item" onClick={() => setCart((current) => { const next = { ...current }; delete next[product.slug]; return next; })} aria-label={`Remove ${product.name} from bag`}><Trash2 size={14} /></button>
                   </div>
                 </div>
               </div>
@@ -181,8 +183,8 @@ export default function Home() {
             {count === 0 ? <p className="cart-empty">Your bag is waiting for something special.</p> : (
               <>
                 <div className="cart-subtotal"><span>Subtotal</span><b>{money(total)}</b></div>
-                <p className="checkout-note">Shipping and taxes are calculated at checkout. Online checkout is being prepared; no payment will be collected here yet.</p>
-                <button className="btn checkout-disabled" disabled>Checkout coming soon</button>
+                <p className="checkout-note">Delivery details are collected at checkout. Payment is currently confirmed manually; no card details are collected.</p>
+                <Link className="btn checkout-disabled" href="/checkout">Continue to checkout</Link>
                 <button className="continue-shopping" onClick={() => setOpen(false)}>Continue shopping</button>
               </>
             )}
