@@ -1,3 +1,4 @@
+import { hasValidRequestOrigin } from "@/lib/security";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
@@ -6,6 +7,7 @@ import { createSession } from "@/lib/auth";
 
 const schema = z.object({ name: z.string().trim().min(2).max(80), email: z.string().trim().email().max(254).transform(v => v.toLowerCase()), password: z.string().min(10).max(128) });
 export async function POST(request: Request) {
+  if (!hasValidRequestOrigin(request)) return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
   const parsed = schema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Enter a valid name, email and password (at least 10 characters)." }, { status: 400 });
   try {
