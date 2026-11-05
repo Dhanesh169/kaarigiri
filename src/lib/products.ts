@@ -1,0 +1,7 @@
+export type Product={id:string;slug:string;name:string;category:string;pricePKR:number;priceUSD:number;description:string;image:string;tag?:string};
+export const products:Product[]=[
+{id:"p1",slug:"woven-table-runner",name:"Woven Table Runner",category:"Textiles",pricePKR:4800,priceUSD:17,description:"A quietly beautiful table layer, woven with care and made for everyday rituals.",image:"https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=85",tag:"Bestseller"},
+{id:"p2",slug:"terracotta-vase",name:"Terracotta Form Vase",category:"Home",pricePKR:6200,priceUSD:22,description:"Sculptural earthenware with an organic silhouette and a warm, tactile finish.",image:"https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=900&q=85"},
+{id:"p3",slug:"handcrafted-basket",name:"Everyday Woven Basket",category:"Storage",pricePKR:3900,priceUSD:14,description:"A versatile handwoven basket for the things you reach for every day.",image:"https://images.unsplash.com/photo-1593085260707-5377ba37f868?auto=format&fit=crop&w=900&q=85"},
+{id:"p4",slug:"artisan-cushion",name:"Textured Cushion Cover",category:"Textiles",pricePKR:5500,priceUSD:20,description:"Soft texture, considered detail, and an easy way to bring warmth into a room.",image:"https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=900&q=85",tag:"New"},
+];
