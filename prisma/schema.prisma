@@ -57,6 +57,8 @@ model Product {
 model Order {
   id           String       @id @default(cuid())
   reference    String       @unique
+  userId       String?
+  user         User?        @relation(fields: [userId], references: [id])
   email        String
   customerName String
   currency     String
