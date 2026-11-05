@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ShoppingBag, ArrowUpRight, X, Plus, Minus, Check, Search, Trash2 } from "lucide-react";
 import { products } from "@/lib/products";
+import { calculateCartSubtotal, countCartItems, sanitizeCart } from "@/lib/cart";
 import PWARegister from "./PWARegister";
 
 type Currency = "PKR" | "USD";
@@ -22,19 +23,7 @@ export default function Home() {
     try {
       const savedCart = localStorage.getItem(CART_KEY);
       const savedCurrency = localStorage.getItem(CURRENCY_KEY);
-      if (savedCart) {
-        const parsed: unknown = JSON.parse(savedCart);
-        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
-          const safeCart: Record<string, number> = {};
-          for (const product of products) {
-            const quantity = (parsed as Record<string, unknown>)[product.id];
-            if (typeof quantity === "number" && Number.isInteger(quantity) && quantity > 0 && quantity < 100) {
-              safeCart[product.id] = quantity;
-            }
-          }
-          setCart(safeCart);
-        }
-      }
+      if (savedCart) setCart(sanitizeCart(JSON.parse(savedCart)));
       if (savedCurrency === "PKR" || savedCurrency === "USD") setCurrency(savedCurrency);
     } catch {
       localStorage.removeItem(CART_KEY);
@@ -51,8 +40,8 @@ export default function Home() {
     localStorage.setItem(CURRENCY_KEY, currency);
   }, [currency]);
 
-  const count = useMemo(() => Object.values(cart).reduce((sum, quantity) => sum + quantity, 0), [cart]);
-  const total = products.reduce((sum, product) => sum + (currency === "PKR" ? product.pricePKR : product.priceUSD) * (cart[product.id] || 0), 0);
+  const count = useMemo(() => countCartItems(cart), [cart]);
+  const total = useMemo(() => calculateCartSubtotal(cart, currency), [cart, currency]);
   const categories = ["All", ...Array.from(new Set(products.map((product) => product.category)))];
   const visibleProducts = products.filter((product) => {
     const matchesCategory = category === "All" || product.category === category;
