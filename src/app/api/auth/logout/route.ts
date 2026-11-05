@@ -1,3 +1,1 @@
-import { NextResponse } from "next/server";
-import { clearSession } from "@/lib/auth";
-export async function POST() { await clearSession(); return NextResponse.json({ ok: true }); }
+import {NextResponse} from "next/server";import {clearSession} from "@/lib/auth";import {hasValidRequestOrigin} from "@/lib/security";export async function POST(request:Request){if(!hasValidRequestOrigin(request))return NextResponse.json({error:"Invalid request origin."},{status:403});await clearSession();return NextResponse.json({success:true});}
