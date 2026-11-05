@@ -1,3 +1,4 @@
+import { hasValidRequestOrigin } from "@/lib/security";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { randomUUID } from "node:crypto";
@@ -16,9 +17,11 @@ export async function GET(){
  return NextResponse.json({orders});
 }
 export async function POST(request:Request){
+ if(!hasValidRequestOrigin(request))return NextResponse.json({error:"Invalid request origin."},{status:403});
  const parsed=schema.safeParse(await request.json().catch(()=>null));
  if(!parsed.success)return NextResponse.json({error:"Please check your contact, delivery and cart details."},{status:400});
  const user=await getSessionUser();
+ if(user && user.email.toLowerCase()!==parsed.data.email)return NextResponse.json({error:"Use the email address associated with your signed-in account."},{status:403});
  try{
   const order=await prisma.$transaction(async tx=>{
    const slugs=[...new Set(parsed.data.items.map(i=>i.slug))];
@@ -30,7 +33,7 @@ export async function POST(request:Request){
    const isPakistan=parsed.data.address.country.toLowerCase()==="pakistan";
    const shipping=parsed.data.currency==="PKR"?(isPakistan?350:2500):(isPakistan?5:15);
    for(const line of lines){const changed=await tx.product.updateMany({where:{id:line.product.id,stock:{gte:line.quantity}},data:{stock:{decrement:line.quantity}}});if(changed.count!==1)throw new Error("INSUFFICIENT_STOCK");}
-   const reference="KA-"+randomUUID().replace(/-/g,"").slice(0,10).toUpperCase();
+   const reference="KA-"+randomUUID().replace(/-/g,"").slice(0,16).toUpperCase();
    return tx.order.create({data:{reference,userId:user?.id,email:parsed.data.email,customerName:parsed.data.customerName,currency:parsed.data.currency,subtotal,shipping,total:subtotal+shipping,address:parsed.data.address,items:{create:lines.map(line=>({productId:line.product.id,name:line.product.name,quantity:line.quantity,unitPrice:line.price}))},payment:{create:{provider:"MANUAL_PENDING",amount:subtotal+shipping,currency:parsed.data.currency,status:"PENDING"}}},select:{reference:true,currency:true,subtotal:true,shipping:true,total:true,status:true,createdAt:true}});
   },{isolationLevel:"Serializable"});
   return NextResponse.json({order,payment:{status:"PENDING",message:"Your order is recorded but payment has not been collected. Our team will contact you to confirm payment."}},{status:201});
